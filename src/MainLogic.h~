@@ -4,9 +4,9 @@
 #include "NecIrcProtocol.h"
 
 typedef enum {
-  BLUE_ID  = 0x00,
-  GREEN_ID = 0x01,
-  RED_ID   = 0x02
+  BLUE_ID  = 0x01,
+  GREEN_ID = 0x02,
+  RED_ID   = 0x03
 } DIOD_ID;
 
 struct Data {
@@ -14,6 +14,7 @@ struct Data {
   int blueFill;
   int greenFill;
   DIOD_ID focus;
+  bool changed;
 } data;
 
 #define DEFAULT_FILL  0x00

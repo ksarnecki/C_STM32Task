@@ -24,15 +24,6 @@ void timer_ll_api_change_pwm_tim5(int percent) {
   TIM5->CR1 &= ~TIM_CR1_UDIS;
 };*/
 
-static int actTime = 0;
-int getTime() {
-  return actTime;
-}
-
-void incTime() {
-  actTime++;
-}
-
 void TIM2_IRQHandler(void) {
   uint32_t it_status = TIM3->SR & TIM3->DIER;
   if (it_status & TIM_SR_UIF) {

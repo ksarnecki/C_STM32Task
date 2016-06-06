@@ -20,18 +20,18 @@ void processCmd(DEVICE_CMD cmd) {
 
   switch (cmd) {
 		case TURN_ON:
-			*fill = MAX_FILL;
+			*fill = MAXFill;
 			break;
 		case TURN_OFF:
-			*fill = MIN_FILL;
+			*fill = MINFill;
 			break;
 		case INC_SOUND:
-			if (*fill <= MAX_FILL - CHANGE_SPEED)
-				*fill += CHANGE_SPEED;
+			if(*fill<=MAXFill-CHANGE_SPEED)
+				*fill+=CHANGE_SPEED;
 			break;
 		case DEC_SOUND:
-			if (*fill >= CHANGE_SPEED)
-				*fill -= CHANGE_SPEED;
+			if(*fill>=CHANGE_SPEED)
+				*fill-=CHANGE_SPEED;
 	}
   
   switch(data.focus) {

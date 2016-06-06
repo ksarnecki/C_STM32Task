@@ -1,6 +1,6 @@
 
-#include "NecIrcProtocol.h"
-#include "TimerHardware.h"
+//#include "NecIrcProtocol.h"
+//#include "TimerHardware.h"
 
 int main() {
   

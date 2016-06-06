@@ -15,8 +15,13 @@
 #define DEFAULT_CCR2 400
 #define DEFAULT_PSC 1
 
-inline int getTime();
-inline void incTime();
+static int actTime = 0;
+inline int getTime() {
+  return actTime;
+}
+inline void incTime() {
+  actTime++;
+}
 
 void changeTim2Pwm(const int, const int, const int);
 void changeTim3Pwm(const int, const int, const int);

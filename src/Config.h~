@@ -1,8 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include <gpio.h>
-
 //Irc
 #define PB1_IDR             0x01
 #define IRC_GPIO_OUT_TYPE   GPIOB

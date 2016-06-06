@@ -1,59 +1,63 @@
-#include "NecIrcProtocol.h"
+#include "irc_ll_api.h"
 
 int getByte(int* bits) {
   int ret = 0;
   int i;
   for(i=0;i<8;i++)
-    if(bits[i]==1) {
-			ret |= (1U << i);
-		}
+    if(bits[i]==1)
+      ret |= (1U << i);
   return ret;
 }
 
-void process(int time) {
-  int t = time-irc_protocol_data.lastFrameTs;
-  irc_protocol_data.lastFrameTs = time;
-  if(t > START_FRAME_TIME) {
-    if(irc_protocol_data.lastFrame == START_FRAME)
-			irc_hl_api_process_remote_cmd(irc_protocol_data.lastCmd);
-		irc_protocol_data.lastFrame = START_FRAME;
-		int i;
-		for(i=0;i<CMD_FRAME_COUNT;i++)
-			irc_protocol_data.cmd[i]=0;
-		irc_protocol_data.cmdPointer = 0;
+void clearBuf() {
+  int i;
+  for(i=0;i<CMD_FRAME_COUNT;i++)
+    ircData.cmd[i]=0;
+  ircData.cmdPointer = 0;
+}
+
+DEVICE_CMD getDeviceCmd(int value) {
+  switch(value) {
+    case
+  }
+}
+
+void processBreak(int actTime) {
+  int breakTime = actTime - ircData.lastFrameTs;
+  ircData.lastFrameTs = actTime;
+  if(breakTime > START_FRAME_TIME) {
+    if(ircData.lastFrame == START_FRAME)
+      processCmd(ircData.lastCmd);
+    clearBuf();
 	} else
-  if(t > ZERO_FRAME_TIME) {
-		irc_protocol_data.cmd[irc_protocol_data.cmdPointer++] = 1;
-    irc_protocol_data.lastFrame = ZERO_FRAME;
+  if(breakTime > ZERO_FRAME_TIME) {
+		ircData.cmd[ircData.cmdPointer++] = 1;
+    ircData.lastFrame = ZERO_FRAME;
   } else
-	if(t > ONE_FRAME_TIME) {
-		irc_protocol_data.cmd[irc_protocol_data.cmdPointer++] = 0;
-		irc_protocol_data.lastFrame = ONE_FRAME;
+	if(breakTime > ONE_FRAME_TIME) {
+		ircData.cmd[ircData.cmdPointer++] = 0;
+		ircData.lastFrame = ONE_FRAME;
   } 
-  if(irc_protocol_data.cmdPointer==CMD_FRAME_COUNT) {
-    irc_protocol_data.lastCmd = getByte(irc_protocol_data.cmd+16);
-		irc_hl_api_process_remote_cmd(irc_protocol_data.lastCmd);
-    //sendInt(getByte(irc_protocol_data.cmd));
-		//sendInt(getByte(irc_protocol_data.cmd+8));
-		//sendInt(getByte(irc_protocol_data.cmd+16));
-		//sendInt(getByte(irc_protocol_data.cmd+24));
+  if(ircData.cmdPointer == CMD_FRAME_COUNT) {
+    ircData.lastCmd = getDeviceCmd(getByte(ircData.cmd+16));
+		processCmd(ircData.lastCmd);
 	}
 }
 
 void EXTI1_IRQHandler(void) {
   EXTI->PR = EXTI_PR_PR1;
-  process(getTime());
+  processBreak(getTime());
 }
 
-void runIrc() {
+void irc_ll_api_init() {
   RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN | RCC_AHB1ENR_GPIOBEN;
   RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
-  GPIOinConfigure(GPIOB, 0x1, GPIO_OType_OD, EXTI_Mode_Interrupt, EXTI_Trigger_Rising);
+  GPIOinConfigure(IRC_GPIO_OUT_TYPE, IRC_GPIO_OUT_NUMBER, GPIO_OType_OD, EXTI_Mode_Interrupt, EXTI_Trigger_Rising);
   EXTI->PR = EXTI_PR_PR1;
   NVIC_EnableIRQ(EXTI1_IRQn);
-  irc_protocol_data.cmdPointer = 0;
-  irc_protocol_data.lastFrameTs = 0;
-  irc_protocol_data.lastFrame = UNKNOWN_FRAME;
+  ircData.cmdPointer = 0;
+  ircData.lastFrameTs = 0;
+  ircData.lastFrame = UNKNOWN_FRAME;
 }
 
 

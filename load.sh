@@ -3,7 +3,7 @@
 # Quick Flash script for STM32F4 NUCLEO-F401RE board
 
 if [ $# -eq 0 ]; then
-  file=`ls *.bin`
+  file=`ls build/*.bin`
 elif [ $# -eq 1 ]; then
   file=$1
 else

@@ -10,13 +10,18 @@ CFLAGS = $(FLAGS) -Wall -g -I/opt/arm/stm32/inc \
 LDFLAGS = $(FLAGS) -Wl,--gc-sections -nostartfiles \
 	  -L/opt/arm/stm32/lds -Tstm32f411re.lds
 vpath %.c /opt/arm/stm32/src
+BINS = src/Main.o src/MainLogic.o src/NecIrcProtocol.o src/TimerHardware.o src/TimerSoftware.o
+NAME = build
 
 .PHONY: all clean
-	.SECONDARY: leds.elf irc/irc_ll_api.o irc/irc_hl_api.o main.o diods/diods_ll_api.o timer/timer_ll_api.o uart/uart_soft.o uart/uart_hardware.o diods/diods_hl_api.o startup_stm32.o sbrk.o\
+	.SECONDARY: $(NAME).elf  $(BINS) startup_stm32.o sbrk.o\
 		delay.o gpio.o
-all: leds.bin
+all: $(NAME).bin move
 
-%.elf : main.o irc/irc_ll_api.o irc/irc_hl_api.o diods/diods_ll_api.o diods/diods_hl_api.o timer/timer_ll_api.o uart/uart_soft.o uart/uart_hardware.o startup_stm32.o delay.o gpio.o sbrk.o
+move: $(NAME).bin
+	mv $(NAME).bin build/
+
+%.elf : $(BINS) startup_stm32.o delay.o gpio.o sbrk.o
 	$(CC) $(LDFLAGS) $^ -o $@
 %.bin : %.elf
 	$(OBJCOPY) $< $@ -O binary

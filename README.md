@@ -1,24 +1,24 @@
-# C_STM32Task
+# README
+## English Version
+## Polska wersja
 
-Polska wersja
-
-Projekt
+### Projekt
 Zaliczeniowy z przedmiotu Mikrokontrolery.
 
-Cel
+### Cel
 Sterowanie pilotem IR diodami led.
 
-Urządzenie docelowe
+### Urządzenie docelowe
 Mikrokontroler STM32 z podłączonymi podzespołami:
 * odbiornik podczerwienie
 * diody led
 
-Implementacja
+### Implementacja
 Projekt implementuje obsługę protokołu komunikacyjnego IR (zgodnie ze specyfikacją firmy NEC),
 po czym następuje obsługa pewnego podzbioru komend nadajnika Ir (przykładowo pilot IR do rzutnika NEC).
 
 
-Użycie
+### Użycie
 1. Po podłączeniu podzespołów należy zmienić plik ustawień lokalnych Config.h
 zgodnie z własą konfiguracją
 2. Kompliacja 

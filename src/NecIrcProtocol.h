@@ -5,6 +5,7 @@
 #include "../diods/diods_hl_api.h"
 #include "../timer/timer_ll_api.h"
 #include "irc_hl_api.h"*/
+#include "Config.h"
 
 
 //protokol
@@ -12,11 +13,6 @@
 #define ZERO_FRAME_TIME		  0x37 // logiczna 1 ~55 cykli wysokiego stanu
 #define ONE_FRAME_TIME		  0x19 // logiczne 0 ~25 cykli wysokiego stanu
 #define CMD_FRAME_COUNT		  0x29 // ilosc bitow w komendzie
-
-//sprzet
-#define PB1_IDR             0x01
-#define IRC_GPIO_OUT_TYPE   GPIOB
-#define IRC_GPIO_OUT_NUMBER 0x01 
 
 //typy
 typedef enum  {
